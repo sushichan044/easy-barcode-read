@@ -3,13 +3,10 @@ import type { CV } from "@techstark/opencv-js";
 import { DetectionConsensus } from "../ean/consensus";
 import { decodeScanline } from "../ean/decode";
 import type { BarcodeResult } from "../ean/types";
-import { PROCESSING_HEIGHT, PROCESSING_WIDTH } from "../vision/frame";
-import { binarizeCanvas, rowToBits, scanlineRows } from "../vision/preprocess";
+import { binarizeImage, rowToBits, scanlineRows } from "../vision/preprocess";
 
 type LoadingCv = CV & { then(onReady: () => void): void };
 
-const canvas = new OffscreenCanvas(PROCESSING_WIDTH, PROCESSING_HEIGHT);
-const context = canvas.getContext("2d", { willReadFrequently: true });
 const consensus = new DetectionConsensus();
 
 let cv: CV | null = null;
@@ -26,13 +23,12 @@ void (import("@techstark/opencv-js") as unknown as Promise<{ default: LoadingCv 
   });
 
 addEventListener("message", ({ data }: MessageEvent<ImageData>) => {
-  if (cv === null || context === null) {
+  if (cv === null) {
     return;
   }
 
   try {
-    context.putImageData(data, 0, 0);
-    const binary = binarizeCanvas(cv, canvas);
+    const binary = binarizeImage(cv, data);
     try {
       const detections = scanlineRows(binary)
         .map((row) => decodeScanline(rowToBits(binary, row)))
