@@ -2,7 +2,7 @@ import { useEffect, useEffectEvent } from "react";
 import type { RefObject } from "react";
 
 import type { BarcodeResult } from "../ean/types";
-import { PROCESSING_HEIGHT, PROCESSING_WIDTH, drawCrop } from "../vision/frame";
+import { PROCESSING_HEIGHT, PROCESSING_WIDTH, drawFrame } from "../vision/frame";
 
 /**
  * 次のフレームを処理するまでの間隔。
@@ -55,7 +55,7 @@ export function useJanScanner({ videoRef, canvasRef, active, onDetected, onError
         schedule();
         return;
       }
-      drawCrop(video, context);
+      drawFrame(video, context);
       const image = context.getImageData(0, 0, PROCESSING_WIDTH, PROCESSING_HEIGHT);
       worker.postMessage(image, [image.data.buffer]);
     };

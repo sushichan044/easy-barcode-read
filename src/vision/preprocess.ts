@@ -1,6 +1,6 @@
 import type { CV, Mat } from "@techstark/opencv-js";
 
-const SCANLINE_RATIOS = [0.2, 0.35, 0.5, 0.65, 0.8];
+const SCANLINE_RATIOS = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8];
 
 export function binarizeCanvas(cv: CV, canvas: HTMLCanvasElement | OffscreenCanvas): Mat {
   const source = cv.imread(canvas as unknown as HTMLElement);
