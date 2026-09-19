@@ -6,7 +6,7 @@ import { App } from "./App";
 
 const container = document.querySelector("#root");
 if (container === null) {
-  throw new Error("ルート要素が見つかりません。");
+  throw new Error("panic");
 }
 
 createRoot(container).render(

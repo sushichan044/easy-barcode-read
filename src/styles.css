@@ -132,24 +132,11 @@ main {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: min(82%, 760px);
-  height: 34%;
+  width: 60%;
+  height: 50%;
   border: 2px solid rgb(255 255 255 / 80%);
-  border-right-color: #f25042;
-  border-left-color: #f25042;
   transform: translate(-50%, -50%);
   pointer-events: none;
-}
-
-.guide::after {
-  position: absolute;
-  top: 50%;
-  right: 8px;
-  left: 8px;
-  height: 1px;
-  background: #f25042;
-  box-shadow: 0 0 9px #f25042;
-  content: "";
 }
 
 .panel {

@@ -72,7 +72,7 @@ export function App() {
       return { message: "JANコードを読み取りました。", tone: "success" };
     }
     if (active) {
-      return { message: "枠の中へJANコードを水平に合わせてください。", tone: "active" };
+      return { message: "JANコード全体を枠内で水平にしてください。", tone: "active" };
     }
     return { message: "準備ができました。カメラを開始できます。", tone: "neutral" };
   })();

@@ -6,7 +6,7 @@ interface Props {
 }
 
 /**
- * カメラ映像と、バーコードを合わせるガイド枠を表示する。
+ * カメラ映像と、読み取り範囲を表示する。
  */
 export function CameraView({ videoRef, running }: Props) {
   return (

@@ -59,9 +59,9 @@ export const EAN13_PARITIES = [
 ] as const;
 
 /**
- * 対応する形式ごとの総モジュール数と、ガードを含む連続区間の数。
+ * 対応する形式ごとの総モジュール数と、ぼけを許容する連続区間数の範囲。
  */
 export const FORMATS = [
-  { format: "EAN-13", modules: 95, runs: 59 },
-  { format: "EAN-8", modules: 67, runs: 43 },
+  { format: "EAN-13", modules: 95, minRuns: 50, maxRuns: 70 },
+  { format: "EAN-8", modules: 67, minRuns: 35, maxRuns: 50 },
 ] as const;

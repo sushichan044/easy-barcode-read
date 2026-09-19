@@ -14,13 +14,14 @@ export default defineConfig({
     },
   },
   fmt: {
-    ignorePatterns: ["pnpm-lock.yaml", "CHANGELOG.md"],
+    ignorePatterns: ["pnpm-lock.yaml", "CHANGELOG.md", "public/vendor/opencv.js"],
     jsdoc: {
       commentLineStrategy: "multiline",
     },
     sortImports: true,
   },
   lint: {
+    ignorePatterns: ["public/vendor/opencv.js"],
     jsPlugins: ["vite-plus/oxlint-plugin"],
     categories: {
       correctness: "error",

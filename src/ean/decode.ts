@@ -1,7 +1,9 @@
 import { hasValidCheckDigit } from "./checkDigit";
 import { EAN13_PARITIES, FORMATS, G_PATTERNS, L_PATTERNS, R_PATTERNS } from "./patterns";
-import { createRuns, modulesBySampling, modulesFromRuns } from "./runs";
+import { createRuns, modulesBySampling } from "./runs";
 import type { BarcodeResult } from "./types";
+
+const SAMPLE_OFFSETS = [-0.25, 0, 0.25];
 
 /**
  * 7モジュールの符号を数字へ変換する。どの表にも無ければnull。
@@ -141,42 +143,39 @@ export function decodeScanline(bits: number[]): BarcodeResult | null {
   const runs = createRuns(text);
 
   for (const configuration of FORMATS) {
-    for (let startIndex = 0; startIndex + configuration.runs <= runs.length; startIndex += 1) {
-      const endIndex = startIndex + configuration.runs - 1;
+    for (let startIndex = 1; startIndex < runs.length - 1; startIndex += 1) {
       const first = runs[startIndex];
-      const last = runs[endIndex];
-      if (first === undefined || last === undefined || first.bit !== "1" || last.bit !== "1") {
-        continue;
-      }
-
-      const candidateRuns = runs.slice(startIndex, endIndex + 1);
-      const start = candidateRuns[0]?.start ?? 0;
-      const end = candidateRuns.at(-1)?.end ?? 0;
-      const moduleWidth = (end - start) / configuration.modules;
       const quietBefore = runs[startIndex - 1];
-      const quietAfter = runs[endIndex + 1];
-
-      if (
-        quietBefore === undefined ||
-        quietAfter === undefined ||
-        quietBefore.bit !== "0" ||
-        quietAfter.bit !== "0" ||
-        quietBefore.length < moduleWidth * 3 ||
-        quietAfter.length < moduleWidth * 3
-      ) {
+      if (first === undefined || quietBefore?.bit !== "0" || first.bit !== "1") {
         continue;
       }
 
-      const normalized = modulesFromRuns(candidateRuns, configuration.modules);
-      const sampled = modulesBySampling(text, start, end, configuration.modules);
-
-      for (const candidate of [normalized, sampled]) {
-        if (candidate === null) {
+      const firstEndIndex = startIndex + configuration.minRuns - 1;
+      const lastEndIndex = Math.min(startIndex + configuration.maxRuns - 1, runs.length - 2);
+      for (let endIndex = firstEndIndex; endIndex <= lastEndIndex; endIndex += 1) {
+        const last = runs[endIndex];
+        const quietAfter = runs[endIndex + 1];
+        if (last === undefined || quietAfter?.bit !== "0" || last.bit !== "1") {
           continue;
         }
-        const decoded = decodeModuleBits(candidate);
-        if (decoded?.format === configuration.format) {
-          return decoded;
+        const moduleWidth = (last.end - first.start) / configuration.modules;
+        if (moduleWidth > 12) {
+          break;
+        }
+        if (
+          moduleWidth < 1 ||
+          quietBefore.length < moduleWidth * 3 ||
+          quietAfter.length < moduleWidth * 3
+        ) {
+          continue;
+        }
+        for (const offset of SAMPLE_OFFSETS) {
+          const decoded = decodeModuleBits(
+            modulesBySampling(text, first.start, last.end, configuration.modules, offset),
+          );
+          if (decoded?.format === configuration.format) {
+            return decoded;
+          }
         }
       }
     }

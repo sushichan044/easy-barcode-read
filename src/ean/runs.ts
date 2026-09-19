@@ -74,11 +74,15 @@ export function modulesBySampling(
   start: number,
   end: number,
   moduleCount: number,
+  offset: number = 0,
 ): string {
   const moduleWidth = (end - start) / moduleCount;
 
   return Array.from({ length: moduleCount }, (_, index) => {
-    const sampleAt = Math.min(end - 1, Math.floor(start + (index + 0.5) * moduleWidth));
+    const sampleAt = Math.min(
+      end - 1,
+      Math.max(start, Math.floor(start + (index + 0.5 + offset) * moduleWidth)),
+    );
     return bits[sampleAt] ?? "0";
   }).join("");
 }

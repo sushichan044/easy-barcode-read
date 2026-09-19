@@ -17,12 +17,16 @@ interface Options {
   onError: (message: string) => void;
 }
 
-type WorkerMessage = { type: "ready" | "error" } | { type: "result"; result: BarcodeResult | null };
+type WorkerMessage =
+  | { type: "ready" }
+  | { type: "error" }
+  | { type: "debug"; frames: number; scannedRows: number }
+  | { type: "result"; result: BarcodeResult | null };
 
 /**
  * カメラが動いている間、一定間隔でフレームを処理してバーコードを探す。
  *
- * OpenCVで二値化した走査線を自作の復号器に通し、複数の走査線とフレームで 同じ結果がそろったときに確定する。
+ * OpenCVで二値化した走査線を自作の復号器に通す。
  */
 export function useJanScanner({ videoRef, canvasRef, active, onDetected, onError }: Options): void {
   const handleDetected = useEffectEvent(onDetected);
@@ -43,6 +47,7 @@ export function useJanScanner({ videoRef, canvasRef, active, onDetected, onError
     let cancelled = false;
     let timer: number | null = null;
     const worker = new Worker(new URL("./scanner.worker.ts", import.meta.url), { type: "module" });
+    console.log("[JAN scanner] started");
 
     const schedule = () => {
       if (!cancelled) {
@@ -55,21 +60,38 @@ export function useJanScanner({ videoRef, canvasRef, active, onDetected, onError
         schedule();
         return;
       }
-      drawFrame(video, context);
-      const image = context.getImageData(0, 0, PROCESSING_WIDTH, PROCESSING_HEIGHT);
-      worker.postMessage(image, [image.data.buffer]);
+      try {
+        drawFrame(video, context);
+        const image = context.getImageData(0, 0, PROCESSING_WIDTH, PROCESSING_HEIGHT);
+        worker.postMessage({ data: image.data, height: image.height, width: image.width }, [
+          image.data.buffer,
+        ]);
+      } catch (error) {
+        console.error("[JAN scanner] frame transfer failed", error);
+        handleError("映像を処理できませんでした。カメラを止めて、もう一度お試しください。");
+      }
     };
 
     worker.addEventListener("message", ({ data }: MessageEvent<WorkerMessage>) => {
       if (data.type === "ready") {
+        console.log("[JAN scanner] OpenCV ready");
         scanFrame();
         return;
       }
       if (data.type === "error") {
+        console.error("[JAN scanner] frame processing failed");
         handleError("映像を処理できませんでした。カメラを止めて、もう一度お試しください。");
         return;
       }
+      if (data.type === "debug") {
+        console.log("[JAN scanner] scanning", {
+          frames: data.frames,
+          scannedRows: data.scannedRows,
+        });
+        return;
+      }
       if ("result" in data && data.result !== null) {
+        console.log("[JAN scanner] detected", data.result);
         handleDetected(data.result);
         return;
       }
