@@ -1,7 +1,7 @@
 interface Props {
   running: boolean;
   ready: boolean;
-  onStart: () => void;
+  onStart: () => Promise<void>;
   onStop: () => void;
 }
 
@@ -20,23 +20,21 @@ export function ControlPanel({ running, ready, onStart, onStop }: Props) {
           <strong>映像や画像は外部へ送信せず、この端末内だけで処理します。</strong>
         </p>
       </div>
-      <div className="actions">
-        {running ? (
-          <button id="stop-camera" className="button button--stop" type="button" onClick={onStop}>
-            カメラを停止
-          </button>
-        ) : (
-          <button
-            id="start-camera"
-            className="button"
-            type="button"
-            disabled={!ready}
-            onClick={onStart}
-          >
-            カメラを開始
-          </button>
-        )}
-      </div>
+      {running ? (
+        <button id="stop-camera" className="button button--stop" type="button" onClick={onStop}>
+          カメラを停止
+        </button>
+      ) : (
+        <button
+          id="start-camera"
+          className="button"
+          type="button"
+          disabled={!ready}
+          onClick={() => void onStart()}
+        >
+          カメラを開始
+        </button>
+      )}
     </section>
   );
 }

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useEffectEvent } from "react";
 import type { RefObject } from "react";
 
 import { detectWithShapeDetection } from "../detection/shapeDetection";
@@ -31,13 +31,8 @@ export function useBarcodeDetector({
   onDetected,
   onError,
 }: Options): void {
-  const onDetectedRef = useRef(onDetected);
-  const onErrorRef = useRef(onError);
-
-  useEffect(() => {
-    onDetectedRef.current = onDetected;
-    onErrorRef.current = onError;
-  }, [onDetected, onError]);
+  const handleDetected = useEffectEvent(onDetected);
+  const handleError = useEffectEvent(onError);
 
   useEffect(() => {
     if (!active || detector === null) {
@@ -63,12 +58,12 @@ export function useBarcodeDetector({
       try {
         result = await detectFrame();
       } catch {
-        onErrorRef.current("映像を処理できませんでした。カメラを止めて、もう一度お試しください。");
+        handleError("映像を処理できませんでした。カメラを止めて、もう一度お試しください。");
         return;
       }
 
       if (result !== null) {
-        onDetectedRef.current(result);
+        handleDetected(result);
         return;
       }
 

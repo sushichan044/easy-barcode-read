@@ -23,7 +23,7 @@ button {
   font: inherit;
 }
 
-.page {
+#root {
   width: min(100% - 32px, 1080px);
   margin: 0 auto;
   padding: 30px 0 24px;
@@ -35,6 +35,12 @@ header {
   justify-content: space-between;
   gap: 24px;
   margin-bottom: 18px;
+}
+
+hgroup,
+.formats,
+footer p {
+  margin: 0;
 }
 
 .eyebrow {
@@ -151,6 +157,10 @@ main {
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 22px;
   padding: clamp(20px, 4vw, 34px);
+}
+
+.panel > .button {
+  align-self: center;
 }
 
 .lead {
@@ -299,7 +309,7 @@ footer a {
 }
 
 @media (width < 680px) {
-  .page {
+  #root {
     width: min(100% - 20px, 1080px);
     padding-top: 18px;
   }
@@ -326,8 +336,7 @@ footer a {
     grid-template-columns: 1fr;
   }
 
-  .button,
-  .actions {
+  .panel > .button {
     width: 100%;
   }
 

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useState } from "react";
 
 import { CameraView } from "../components/CameraView";
 import { ControlPanel } from "../components/ControlPanel";
@@ -33,28 +33,20 @@ export function App() {
   const { videoRef, active, error: cameraError, start, stop } = useCamera();
 
   const [result, setResult] = useState<BarcodeResult | null>(null);
-  const [stopped, setStopped] = useState(false);
   const [scannerError, setScannerError] = useState<string | null>(null);
 
-  const shapeSupported = useMemo(() => isShapeDetectionSupported(), []);
-  const detector = useMemo(() => (shapeSupported ? createShapeDetector() : null), [shapeSupported]);
+  const [detector] = useState(() => (isShapeDetectionSupported() ? createShapeDetector() : null));
+  const shapeSupported = detector !== null;
 
-  const handleDetected = useCallback(
-    (detected: BarcodeResult) => {
-      setResult(detected);
-      stop();
-    },
-    [stop],
-  );
+  function handleDetected(detected: BarcodeResult) {
+    setResult(detected);
+    stop();
+  }
 
-  const handleScannerError = useCallback(
-    (message: string) => {
-      setScannerError(message);
-      stop({ keepError: true });
-      setStopped(true);
-    },
-    [stop],
-  );
+  function handleScannerError(message: string) {
+    setScannerError(message);
+    stop({ keepError: true });
+  }
 
   useBarcodeDetector({
     detector,
@@ -66,10 +58,9 @@ export function App() {
 
   const ready = detector !== null;
 
-  const handleStart = useCallback(async () => {
+  async function handleStart() {
     setResult(null);
     setScannerError(null);
-    setStopped(false);
 
     if (!window.isSecureContext) {
       setScannerError("カメラの利用にはHTTPSで開く必要があります。");
@@ -85,14 +76,13 @@ export function App() {
     }
 
     await start();
-  }, [detector, start]);
+  }
 
-  const handleStop = useCallback(() => {
+  function handleStop() {
     stop();
-    setStopped(true);
-  }, [stop]);
+  }
 
-  const status = useMemo<Status>(() => {
+  const status: Status = (() => {
     if (!shapeSupported) {
       return { message: "このブラウザはShape Detection APIに対応していません。", tone: "error" };
     }
@@ -108,37 +98,27 @@ export function App() {
     if (active) {
       return { message: "枠の中へJANコードを水平に合わせてください。", tone: "active" };
     }
-    if (stopped) {
-      return { message: "カメラを停止しました。", tone: "neutral" };
-    }
     return { message: "準備ができました。カメラを開始できます。", tone: "neutral" };
-  }, [shapeSupported, cameraError, scannerError, result, active, stopped]);
+  })();
 
   return (
-    <div className="page">
+    <>
       <header>
-        <div>
+        <hgroup>
           <p className="eyebrow">browser barcode reader / shape detection api</p>
           <h1>JAN Scan</h1>
-        </div>
-        <span className="formats">EAN-13 / EAN-8</span>
+        </hgroup>
+        <p className="formats">EAN-13 / EAN-8</p>
       </header>
       <main>
         <CameraView videoRef={videoRef} running={active} />
-        <ControlPanel
-          running={active}
-          ready={ready}
-          onStart={() => {
-            void handleStart();
-          }}
-          onStop={handleStop}
-        />
+        <ControlPanel running={active} ready={ready} onStart={handleStart} onStop={handleStop} />
         <ResultReadout message={status.message} tone={status.tone} result={result} />
       </main>
       <footer>
-        <span>検出と復号はブラウザ内蔵のBarcodeDetectorに任せています。</span>
+        <p>検出と復号はブラウザ内蔵のBarcodeDetectorに任せています。</p>
         <a href="/index.html">OpenCV版を見る</a>
       </footer>
-    </div>
+    </>
   );
 }

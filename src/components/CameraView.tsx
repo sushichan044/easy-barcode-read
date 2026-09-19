@@ -10,13 +10,13 @@ interface Props {
  */
 export function CameraView({ videoRef, running }: Props) {
   return (
-    <section id="scanner" data-running={String(running)} aria-label="カメラ映像">
+    <section id="scanner" data-running={running} aria-label="カメラ映像">
       <video ref={videoRef} id="camera" autoPlay muted playsInline />
       <div className="empty-camera" aria-hidden="true">
         <span className="barcode-mark" />
-        <span>カメラはまだ起動していません</span>
+        カメラはまだ起動していません
       </div>
-      <div className="guide" aria-hidden="true" />
+      <span className="guide" aria-hidden="true" />
     </section>
   );
 }
