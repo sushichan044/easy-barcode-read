@@ -1,0 +1,44 @@
+{
+  "name": "template-ts-lib-polyrepo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "",
+  "keywords": [],
+  "homepage": "https://github.com/sushichan044/template-ts-lib-polyrepo#readme",
+  "bugs": {
+    "url": "https://github.com/sushichan044/template-ts-lib-polyrepo/issues"
+  },
+  "license": "",
+  "author": {
+    "name": "sushichan044",
+    "url": "https://github.com/sushichan044"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sushichan044/template-ts-lib-polyrepo.git"
+  },
+  "funding": "https://github.com/sponsors/sushichan044",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:dev",
+    "@virtual-live-lab/tsconfig": "catalog:dev",
+    "typescript": "catalog:dev",
+    "vite-plus": "catalog:dev"
+  },
+  "packageManager": "pnpm@12.4.2"
+}

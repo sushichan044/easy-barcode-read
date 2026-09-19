@@ -1,0 +1,17 @@
+name: Setup env
+description: Setup development environment for CI workflows
+
+inputs:
+  node-version-file:
+    description: "Path to a file containing the Node.js version to use. If not set, defaults to '.node-version'."
+    required: false
+    default: ".node-version"
+
+runs:
+  using: composite
+  steps:
+    - name: Setup vite-plus
+      uses: voidzero-dev/setup-vp@250f29ce396baf5e8f24498e17c0dfdebabc26eb # v1.15.0
+      with:
+        cache: ${{ github.ref_name == 'main' }}
+        node-version-file: ${{ inputs.node-version-file }}
