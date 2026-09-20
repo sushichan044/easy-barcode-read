@@ -1,16 +1,11 @@
 import { fileURLToPath } from "node:url";
 
-import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite-plus";
 
 export default defineConfig({
-  plugins: [react()],
   build: {
     rollupOptions: {
-      input: {
-        index: fileURLToPath(new URL("index.html", import.meta.url)),
-        "shape-detection": fileURLToPath(new URL("shape-detection.html", import.meta.url)),
-      },
+      input: fileURLToPath(new URL("index.html", import.meta.url)),
     },
   },
   fmt: {
@@ -48,7 +43,6 @@ export default defineConfig({
       "import",
       "node",
       "promise",
-      "react",
       "vitest",
     ],
     rules: {

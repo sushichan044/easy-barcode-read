@@ -1,6 +1,31 @@
-import type { CV, Mat } from "@techstark/opencv-js";
-
 const SCANLINE_INTERVAL = 24;
+
+export interface Mat {
+  cols: number;
+  data: Uint8Array;
+  delete(): void;
+  rows: number;
+}
+
+export interface CV {
+  BORDER_DEFAULT: number;
+  COLOR_RGBA2GRAY: number;
+  CV_8UC4: number;
+  Mat: new (rows?: number, cols?: number, type?: number) => Mat;
+  Size: new (width: number, height: number) => unknown;
+  THRESH_BINARY: number;
+  THRESH_OTSU: number;
+  GaussianBlur(
+    source: Mat,
+    destination: Mat,
+    size: unknown,
+    sigmaX: number,
+    sigmaY: number,
+    borderType: number,
+  ): void;
+  cvtColor(source: Mat, destination: Mat, code: number): void;
+  threshold(source: Mat, destination: Mat, threshold: number, max: number, type: number): void;
+}
 
 export interface Frame {
   data: Uint8ClampedArray;

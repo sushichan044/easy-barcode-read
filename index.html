@@ -7,11 +7,32 @@
       name="description"
       content="OpenCV.jsで映像を二値化し、自前の復号器でEAN-13とEAN-8を読み取るブラウザアプリです。"
     />
-    <meta name="theme-color" content="#f3efe4" />
+    <meta name="theme-color" content="#edf1f2" />
     <title>JAN Scan（OpenCV版）</title>
+    <link rel="stylesheet" href="/src/styles.css" />
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/opencv/main.tsx"></script>
+    <main class="app" data-state="idle">
+      <header class="app-header">
+        <div>
+          <h1>JAN Scan</h1>
+          <p>OpenCV.js</p>
+        </div>
+        <span class="formats">EAN-13 / EAN-8</span>
+      </header>
+      <div class="viewfinder">
+        <video width="960" height="540" autoplay muted playsinline aria-hidden="true"></video>
+        <span class="guide" aria-hidden="true"></span>
+      </div>
+      <div class="controls">
+        <div class="feedback" role="status">
+          <p class="message">ボタンを押すとカメラが起動します。</p>
+          <p class="result" hidden><span></span><strong></strong></p>
+        </div>
+        <button type="button">カメラを開始</button>
+      </div>
+      <canvas width="960" height="450" hidden></canvas>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

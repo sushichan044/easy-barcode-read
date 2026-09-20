@@ -16,8 +16,3 @@ Docs are local at `node_modules/vite-plus/docs` or online at <https://viteplus.d
 - [ ] If setup, runtime, or package-manager behavior looks wrong, run `vp env doctor` and include its output when asking for help.
 
 <!--VITE PLUS END-->
-
-## Coding Tips
-
-- Using React Compiler, no manual memo needed.
-- Follow React19.3 practices.
