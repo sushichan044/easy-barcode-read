@@ -1,22 +1,14 @@
-import { fileURLToPath } from "node:url";
-
 import { defineConfig } from "vite-plus";
 
 export default defineConfig({
-  build: {
-    rollupOptions: {
-      input: fileURLToPath(new URL("index.html", import.meta.url)),
-    },
-  },
   fmt: {
-    ignorePatterns: ["pnpm-lock.yaml", "CHANGELOG.md", "public/vendor/opencv.js"],
+    ignorePatterns: ["pnpm-lock.yaml", "CHANGELOG.md"],
     jsdoc: {
       commentLineStrategy: "multiline",
     },
     sortImports: true,
   },
   lint: {
-    ignorePatterns: ["public/vendor/opencv.js"],
     jsPlugins: ["vite-plus/oxlint-plugin"],
     categories: {
       correctness: "error",

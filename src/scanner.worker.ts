@@ -12,7 +12,7 @@ interface OpenCVModule extends CV {
 
 let opencv: CV | null = null;
 
-await import(OPENCV_URL)
+await import(/* @vite-ignore */ OPENCV_URL)
   .then(async () => {
     // @ts-expect-error no types
     const mod: OpenCVModule | null = globalThis["cv"];
