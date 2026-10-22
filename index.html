@@ -1,11 +1,30 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>JANコードスキャナ</title>
+    <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <h1>hello</h1>
+    <main>
+      <h1>JANコードスキャナ</h1>
+      <p>13桁のJANコードに対応</p>
+      <div class="viewfinder">
+        <video width="960" height="540" autoplay muted playsinline aria-hidden="true"></video>
+        <span class="guide" aria-hidden="true"></span>
+      </div>
+      <div role="status">
+        <p class="message"></p>
+        <p class="result"></p>
+      </div>
+      <button type="button">カメラを起動する</button>
+      <canvas width="960" height="450" hidden></canvas>
+      <noscript>このページを使うにはJavaScriptを有効にしてください。</noscript>
+    </main>
+    <script type="module" src="./main.js"></script>
   </body>
 </html>

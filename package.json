@@ -1,12 +1,16 @@
 {
-  "name": "template-ts-lib-polyrepo",
+  "name": "easy-barcode-read",
   "version": "0.0.0",
   "private": true,
-  "description": "",
-  "keywords": [],
-  "homepage": "https://github.com/sushichan044/template-ts-lib-polyrepo#readme",
+  "description": "A browser-only EAN-13 barcode reader.",
+  "keywords": [
+    "barcode",
+    "ean-13",
+    "opencv"
+  ],
+  "homepage": "https://github.com/sushichan044/easy-barcode-read#readme",
   "bugs": {
-    "url": "https://github.com/sushichan044/template-ts-lib-polyrepo/issues"
+    "url": "https://github.com/sushichan044/easy-barcode-read/issues"
   },
   "license": "",
   "author": {
@@ -15,29 +19,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sushichan044/template-ts-lib-polyrepo.git"
+    "url": "git+https://github.com/sushichan044/easy-barcode-read.git"
   },
   "funding": "https://github.com/sponsors/sushichan044",
-  "files": [
-    "dist"
-  ],
   "type": "module",
-  "sideEffects": false,
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.mts",
-      "import": "./dist/index.mjs"
-    },
-    "./package.json": "./package.json"
-  },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
-  },
   "devDependencies": {
-    "@types/node": "catalog:dev",
-    "@virtual-live-lab/tsconfig": "catalog:dev",
-    "typescript": "catalog:dev",
     "vite-plus": "catalog:dev"
   },
   "packageManager": "pnpm@12.4.2"
