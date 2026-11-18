@@ -4,10 +4,10 @@ allowBuilds:
 
 catalogs:
   dev:
-    "@types/node": 26.1.2
+    "@types/node": 26.6.6
     "@virtual-live-lab/tsconfig": 2.1.23
     typescript: 7.0.2
-    vite-plus: 1.6.0
+    vite-plus: 1.7.0
     vite: npm:@voidzero-dev/vite-plus-core@1.6.0
 
 saveExact: true
